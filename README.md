@@ -1,6 +1,3 @@
-Here’s a detailed `README.md` template for your project that can help people understand its purpose, how to set it up, and how to contribute:
-
-```markdown
 # Blog Platform - Frontend
 
 A blog platform that allows users to share thoughts, create posts, and explore posts from others. This project is the frontend for a blog application built using React.js and Bootstrap.
