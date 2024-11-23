@@ -1,7 +1,7 @@
 # Blog Platform - Frontend  
  
 A blog platform that allows users to share thoughts, create posts, and explore posts from others. This project is the frontend for a blog application built using React.js and Bootstrap.
-
+ 
 ## Features
 
 - User Authentication: Login and signup functionality.
