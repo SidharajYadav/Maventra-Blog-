@@ -1,59 +1,42 @@
-require('dotenv').config();  
-const express = require('express');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const authRoutes = require("./routes/authRoutes");
+const postRoutes = require("./routes/postRoutes");
+
+// Load environment variables
+dotenv.config();
+
 const app = express();
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/blogApp";
 
-app.use(express.json());  
+// Middleware
+app.use(bodyParser.json()); // Parse JSON bodies
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('MongoDB connection failed:', error);
-  }
-};
-connectDB();
+// Database connection
+mongoose
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/posts", postRoutes);
 
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-
-  
-  if (email === 'user@example.com' && password === 'password') {
-   
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: '1h', 
-    });
-
-    res.json({ token }); 
-  } else {
-    res.status(401).json({ message: 'Invalid credentials' });
-  }
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: "Internal Server Error" });
 });
 
-
-app.get('/api/protected', (req, res) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.json({ message: 'This is a protected route', user: decoded });
-  } catch (error) {
-    res.status(400).json({ message: 'Invalid token' });
-  }
-});
-
-
-const PORT = process.env.PORT || 5000; 
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
