@@ -13,7 +13,7 @@ router.post("/createPost", async (req, res) => {
       .json({ message: "Error creating post", error: err.message });
   }
 });
-
+ 
 router.put("/updatePost/:id", async (req, res) => {
   try {
     const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
