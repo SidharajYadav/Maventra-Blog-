@@ -17,7 +17,7 @@ router.post("/signup", async (req, res) => {
       .status(500)
       .json({ message: "Error registering user", error: err.message });
   }
-});
+}); 
 
 router.post("/login", async (req, res) => {
   try {
