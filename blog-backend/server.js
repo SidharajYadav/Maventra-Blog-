@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
-const postRoutes = require("./routes/postRoutes");
+const postRoutes = require("./routes/postRoutes"); 
 
 // Load environment variables
 dotenv.config();
